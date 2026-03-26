@@ -10,7 +10,12 @@ This is your **complete learning workspace** for mastering **"Programming Rust"*
 
 ### 🎯 Structure
 
-**23 chapter projects** - One project for each chapter of the book:
+**23 chapter projects** - One project for each chapter of the book
+**6 capstone projects** - Production-ready integrative applications
+
+---
+
+## 📦 Chapter Projects
 
 1. **ch01-intro** - Systems programming foundations
 2. **ch02-tour** - Tour of Rust basics
@@ -35,6 +40,21 @@ This is your **complete learning workspace** for mastering **"Programming Rust"*
 21. **ch21-macros** - Declarative and procedural macros
 22. **ch22-unsafe** - Unsafe Rust (library project)
 23. **ch23-ffi** - Foreign function interface (library project)
+
+---
+
+## 🚀 Capstone Projects (Production-Ready)
+
+**6 integrative applications** that combine multiple chapters:
+
+1. **capstone-01-grep-clone** - Fast text search tool (like ripgrep)
+2. **capstone-02-json-db** - Document database with queries
+3. **capstone-03-http-server** - Async HTTP/1.1 server
+4. **capstone-04-compiler** - Programming language compiler
+5. **capstone-05-game-engine** - 2D game engine with ECS
+6. **capstone-06-blockchain** - Blockchain with proof-of-work
+
+See `CAPSTONE_PROJECTS.md` for detailed specifications.
 
 ---
 

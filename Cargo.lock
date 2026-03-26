@@ -3,6 +3,30 @@
 version = 4
 
 [[package]]
+name = "capstone-01-grep-clone"
+version = "0.1.0"
+
+[[package]]
+name = "capstone-02-json-db"
+version = "0.1.0"
+
+[[package]]
+name = "capstone-03-http-server"
+version = "0.1.0"
+
+[[package]]
+name = "capstone-04-compiler"
+version = "0.1.0"
+
+[[package]]
+name = "capstone-05-game-engine"
+version = "0.1.0"
+
+[[package]]
+name = "capstone-06-blockchain"
+version = "0.1.0"
+
+[[package]]
 name = "ch01-intro"
 version = "0.1.0"
 

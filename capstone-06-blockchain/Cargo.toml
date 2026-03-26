@@ -1,0 +1,7 @@
+[package]
+name = "capstone-06-blockchain"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]

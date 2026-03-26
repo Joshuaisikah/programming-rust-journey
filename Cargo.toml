@@ -1,6 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
+    # Chapter-by-chapter projects
     "ch01-intro",
     "ch02-tour",
     "ch03-fundamental-types",
@@ -24,6 +25,14 @@ members = [
     "ch21-macros",
     "ch22-unsafe",
     "ch23-ffi",
+
+    # Capstone Projects - Integrative & Production-Ready
+    "capstone-01-grep-clone",          # Combines: Ch 7, 14, 15, 17, 18
+    "capstone-02-json-db",             # Combines: Ch 9, 10, 11, 16, 18
+    "capstone-03-http-server",         # Combines: Ch 11, 18, 19, 20
+    "capstone-04-compiler",            # Combines: Ch 10, 15, 21, 22
+    "capstone-05-game-engine",         # Combines: Ch 9, 11, 12, 13, 19
+    "capstone-06-blockchain",          # Combines: Ch 9, 11, 16, 18, 22
 ]
 
 [workspace.package]
@@ -43,3 +52,4 @@ reqwest = { version = "0.12", features = ["json"] }
 regex = "1.11"
 rayon = "1.10"
 crossbeam = "0.8"
+sha2 = "0.10"

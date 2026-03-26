@@ -1,0 +1,7 @@
+[package]
+name = "capstone-05-game-engine"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]

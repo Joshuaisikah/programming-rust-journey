@@ -1,0 +1,7 @@
+[package]
+name = "capstone-04-compiler"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]

@@ -1,0 +1,7 @@
+[package]
+name = "capstone-01-grep-clone"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]
