@@ -1,0 +1,7 @@
+[package]
+name = "ch02-tour"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]

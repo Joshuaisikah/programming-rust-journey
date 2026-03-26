@@ -1,0 +1,45 @@
+[workspace]
+resolver = "2"
+members = [
+    "ch01-intro",
+    "ch02-tour",
+    "ch03-fundamental-types",
+    "ch04-ownership",
+    "ch05-references",
+    "ch06-expressions",
+    "ch07-error-handling",
+    "ch08-crates-modules",
+    "ch09-structs",
+    "ch10-enums-patterns",
+    "ch11-traits-generics",
+    "ch12-operator-overloading",
+    "ch13-utility-traits",
+    "ch14-closures",
+    "ch15-iterators",
+    "ch16-collections",
+    "ch17-strings-text",
+    "ch18-input-output",
+    "ch19-concurrency",
+    "ch20-async",
+    "ch21-macros",
+    "ch22-unsafe",
+    "ch23-ffi",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["cyber-alchemist"]
+
+[workspace.dependencies]
+# Common dependencies
+tokio = { version = "1.42", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+anyhow = "1.0"
+thiserror = "2.0"
+clap = { version = "4.5", features = ["derive"] }
+reqwest = { version = "0.12", features = ["json"] }
+regex = "1.11"
+rayon = "1.10"
+crossbeam = "0.8"

@@ -1,0 +1,7 @@
+[package]
+name = "ch12-operator-overloading"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]

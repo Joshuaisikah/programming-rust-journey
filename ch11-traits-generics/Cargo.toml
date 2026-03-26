@@ -1,0 +1,7 @@
+[package]
+name = "ch11-traits-generics"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]

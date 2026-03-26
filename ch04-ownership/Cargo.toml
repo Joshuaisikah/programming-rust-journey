@@ -1,0 +1,7 @@
+[package]
+name = "ch04-ownership"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]

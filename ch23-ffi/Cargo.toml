@@ -1,0 +1,7 @@
+[package]
+name = "ch23-ffi"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]
