@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="EMPTY_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/capstone-01-grep-clone/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/capstone-02-json-db/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/capstone-03-http-server/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/capstone-04-compiler/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/capstone-05-game-engine/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/capstone-06-blockchain/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch01-intro/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch02-tour/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch03-fundamental-types/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch04-ownership/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch05-references/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch06-expressions/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch07-error-handling/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch08-crates-modules/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch09-structs/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch10-enums-patterns/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch11-traits-generics/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch12-operator-overloading/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch13-utility-traits/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch14-closures/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch15-iterators/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch16-collections/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch17-strings-text/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch18-input-output/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch19-concurrency/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch20-async/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch21-macros/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch22-unsafe/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ch23-ffi/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/password-vault/src" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

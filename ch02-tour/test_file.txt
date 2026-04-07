@@ -1,0 +1,9 @@
+Rust is a systems programming language.
+Rust is safe and fast.
+Python is easy to learn.
+Rust has zero-cost abstractions.
+The Rust compiler is very helpful.
+rust (lowercase) should not match if case-sensitive.
+TODO: Add more features
+TODO: Write more tests
+FIXME: Bug in the error handler
