@@ -31,7 +31,13 @@ pub fn convert_base(num: i64, to_base: &str) {
     //     "decimal" | "dec" | "d"        => println!("{}", num),
     //     _ => eprintln!("Unknown base: {}. Use binary/hex/octal/decimal", to_base),
     // }
-    todo!("implement convert_base")
+    match to_base.to_lowercase().as_str(){
+        "binary" | "bin" | "b" => println!("0b{:b}", num),
+        "hex" | "h" | "hexadecimal" => println!("0x{:x}", num),
+        "octal" | "o" | "oct" => println!("0o{:o}", num),
+        "decimal" | "dec" | "d"        => println!("{}", num),  // ✓ Just print the number
+        _ => eprintln!("Unknown base: {}. Use binary/hex/octal/decimal", to_base),
+    }
 }
 
 /// Convert a temperature value between C, F, and K.
@@ -49,6 +55,7 @@ pub fn convert_temperature(value: f64, from: &str, to: &str) {
     // TODO: implement
     //
     // Step 1 — to Celsius:
+
     //   "C" => value
     //   "F" => (value - 32.0) * 5.0 / 9.0
     //   "K" => value - 273.15
@@ -59,7 +66,28 @@ pub fn convert_temperature(value: f64, from: &str, to: &str) {
     //   "K" => celsius + 273.15
     //
     // println!("{:.2}°{} = {:.2}°{}", value, from.to_uppercase(), result, to.to_uppercase());
-    todo!("implement convert_temperature")
+    let celcius = to_celsius(value,from);
+    let result = celsius_to(celcius, to);
+    println!("{:.2}°{} = {:.2}°{}", value, from.to_uppercase(), result, to.to_uppercase());
+
+}
+fn celsius_to(celsius: f64, to: &str) -> f64 {
+    match to.to_uppercase().as_str() {
+        "C" => celsius,
+        "F" => (celsius * 9.0 / 5.0) + 32.0,
+        "K" => celsius + 273.15,
+        _ => panic!("Unknown target unit: {}. Use C/F/K", to),
+    }
+}
+
+fn to_celsius(value: f64, from: &str) -> f64 {
+    match from.to_uppercase().as_str() {
+        "C" =>value,
+        "F" =>(value -32.0)*5.0/9.0,
+        "K" => value-273.15,
+        _ => panic!("Unknown target unit: {}. Use C/F/K", from),
+
+    }
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -68,31 +96,29 @@ pub fn convert_temperature(value: f64, from: &str, to: &str) {
 
 #[cfg(test)]
 mod tests {
-    // use super::*;
-
-    // TODO: uncomment when implemented
-    //
-    // Helper to avoid printing in tests — extract logic into
-    // a private fn celsius_to(celsius: f64, to: &str) -> f64
-    // then test that instead of convert_temperature directly.
-
-    // #[test]
-    // fn test_freezing_point() {
-    //     // 0°C = 32°F = 273.15K
-    // }
-
-    // #[test]
-    // fn test_boiling_point() {
-    //     // 100°C = 212°F = 373.15K
-    // }
-
-    // #[test]
-    // fn test_body_temp() {
-    //     // 37°C ≈ 98.6°F
-    // }
+    use super::*;
 
     #[test]
-    fn placeholder() {
-        assert!(true);
+    fn test_freezing_point() {
+        // 0°C = 32°F = 273.15K
+        assert_eq!(celsius_to(0.0, "F"), 32.0);
+        assert_eq!(celsius_to(0.0, "K"), 273.15);
+        assert!((to_celsius(32.0, "F") - 0.0).abs() < 1e-10);
+        assert!((to_celsius(273.15, "K") - 0.0).abs() < 1e-10);
+    }
+
+    #[test]
+    fn test_boiling_point() {
+        // 100°C = 212°F = 373.15K
+        assert_eq!(celsius_to(100.0, "F"), 212.0);
+        assert_eq!(celsius_to(100.0, "K"), 373.15);
+        assert!((to_celsius(212.0, "F") - 100.0).abs() < 1e-10);
+        assert!((to_celsius(373.15, "K") - 100.0).abs() < 1e-10);
+    }
+
+    #[test]
+    fn test_body_temp() {
+        // 37°C ≈ 98.6°F
+        assert!((celsius_to(37.0, "F") - 98.6).abs() < 1e-10);
     }
 }

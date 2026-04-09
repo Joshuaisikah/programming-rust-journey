@@ -24,6 +24,58 @@ use ch03_fundamental_types::{
 };
 
 fn main() {
-    // TODO: implement dispatch logic (see structure above)
-    todo!("implement main dispatch")
+    let args: Vec<String> = env::args().collect();
+
+    // Skip the program name (args[0])
+    if args.len() < 2 {
+        print_usage();
+        return;
+    }
+
+    match args[1].as_str() {
+        "convert" => {
+            if args.len() < 4 {
+                eprintln!("Error: convert requires 2 arguments: <number> <base>");
+                print_usage();
+                return;
+            }
+            let num = match parse_number(&args[2]) {
+                num => num,
+                // parse_number already panics on invalid input, so this shouldn't happen
+            };
+            convert_base(num, &args[3]);
+        }
+        "temp" => {
+            if args.len() < 5 {
+                eprintln!("Error: temp requires 3 arguments: <value> <from> <to>");
+                print_usage();
+                return;
+            }
+            let value = match args[2].parse::<f64>() {
+                Ok(v) => v,
+                Err(_) => {
+                    eprintln!("Error: invalid temperature value '{}'", args[2]);
+                    return;
+                }
+            };
+            convert_temperature(value, &args[3], &args[4]);
+        }
+        _ => {
+            // Default: arithmetic calculation
+            if args.len() < 4 {
+                eprintln!("Error: calculation requires 3 arguments: <num1> <op> <num2>");
+                print_usage();
+                return;
+            }
+            let a = match parse_number(&args[1]) {
+                a => a,
+                // parse_number already panics on invalid input
+            };
+            let b = match parse_number(&args[3]) {
+                b => b,
+                // parse_number already panics on invalid input
+            };
+            calculate(a, &args[2], b);
+        }
+    }
 }

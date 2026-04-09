@@ -20,3 +20,4 @@ pub use calculator::calculate;
 pub use converter::{convert_base, convert_temperature};
 pub use display::{display_in_all_bases, print_usage};
 pub use parser::parse_number;
+
