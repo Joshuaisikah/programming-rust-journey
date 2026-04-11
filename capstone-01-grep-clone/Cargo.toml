@@ -5,3 +5,22 @@ edition.workspace = true
 authors.workspace = true
 
 [dependencies]
+regex.workspace = true
+rayon.workspace = true
+clap.workspace = true
+anyhow.workspace = true
+thiserror.workspace = true
+walkdir = "2.5"
+colored = "2.1"
+ignore = "0.4"
+
+[dev-dependencies]
+tempfile = "3"
+
+[[bin]]
+name = "rgrep"
+path = "src/main.rs"
+
+[lib]
+name = "grep_clone"
+path = "src/lib.rs"

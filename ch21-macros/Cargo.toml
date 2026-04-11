@@ -1,7 +1,0 @@
-[package]
-name = "ch21-macros"
-version.workspace = true
-edition.workspace = true
-authors.workspace = true
-
-[dependencies]

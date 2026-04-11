@@ -18,7 +18,7 @@ fn compute(a: i64, op: &str, b: i64) -> Option<i64> {
     }
 }
 
-/// Performs an arithmetic or bitwise operation on two i64 values
+/// Performs an ariOptionthmetic or bitwise operation on two i64 values
 /// and prints the result in all number bases.
 pub fn calculate(a: i64, op: &str, b: i64) {
     match compute(a, op, b) {

@@ -1,30 +1,17 @@
 [workspace]
 resolver = "2"
 members = [
-    # Chapter-by-chapter projects
+    # Completed chapter-by-chapter projects
     "ch01-intro",
     "ch02-tour",
     "ch03-fundamental-types",
     "ch04-ownership",
-    "ch05-references",
-    "ch06-expressions",
-    "ch07-error-handling",
-    "ch08-crates-modules",
-    "ch09-structs",
-    "ch10-enums-patterns",
-    "ch11-traits-generics",
-    "ch12-operator-overloading",
-    "ch13-utility-traits",
-    "ch14-closures",
-    "ch15-iterators",
-    "ch16-collections",
-    "ch17-strings-text",
-    "ch18-input-output",
-    "ch19-concurrency",
-    "ch20-async",
-    "ch21-macros",
-    "ch22-unsafe",
-    "ch23-ffi",
+
+    # Learning Projects — 4 projects covering Ch01–Ch23
+    "cli-toolbox",      # Ch01–10: Types, ownership, refs, expressions, errors, modules, structs, enums
+    "datastruct-lib",   # Ch11–16: Traits/generics, op-overload, utility traits, closures, iterators, collections
+    "forge",            # Ch17–20: Strings/text, I/O, concurrency, async
+    "netwatch",         # Ch21–23: Macros, unsafe, FFI
 
     # Capstone Projects - Integrative & Production-Ready
     "capstone-01-grep-clone",          # Combines: Ch 7, 14, 15, 17, 18
@@ -53,3 +40,4 @@ regex = "1.11"
 rayon = "1.10"
 crossbeam = "0.8"
 sha2 = "0.10"
+hex = "0.4"

@@ -52,20 +52,6 @@ pub fn convert_base(num: i64, to_base: &str) {
 /// convert_temperature(0.0, "C", "K");   // prints 273.15 K
 /// ```
 pub fn convert_temperature(value: f64, from: &str, to: &str) {
-    // TODO: implement
-    //
-    // Step 1 — to Celsius:
-
-    //   "C" => value
-    //   "F" => (value - 32.0) * 5.0 / 9.0
-    //   "K" => value - 273.15
-    //
-    // Step 2 — Celsius to output:
-    //   "C" => celsius
-    //   "F" => (celsius * 9.0 / 5.0) + 32.0
-    //   "K" => celsius + 273.15
-    //
-    // println!("{:.2}°{} = {:.2}°{}", value, from.to_uppercase(), result, to.to_uppercase());
     let celcius = to_celsius(value,from);
     let result = celsius_to(celcius, to);
     println!("{:.2}°{} = {:.2}°{}", value, from.to_uppercase(), result, to.to_uppercase());

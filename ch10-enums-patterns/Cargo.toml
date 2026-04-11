@@ -1,7 +1,0 @@
-[package]
-name = "ch10-enums-patterns"
-version.workspace = true
-edition.workspace = true
-authors.workspace = true
-
-[dependencies]

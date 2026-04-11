@@ -1,3 +1,5 @@
+
+
 /// Prints CLI usage instructions.
 pub fn print_usage() {
     println!("Usage:");
