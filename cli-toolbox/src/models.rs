@@ -8,10 +8,12 @@
 //   Pattern matching    — used inside Priority::from_str
 
 use crate::errors::CliError;
+use serde::{Deserialize, Serialize};
 
 // ── Priority ──────────────────────────────────────────────────
 
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+
 pub enum Priority {
     High,
     Medium,
@@ -22,18 +24,28 @@ impl Priority {
     /// Parse a case-insensitive string into a Priority variant.
     /// Returns Err(CliError::InvalidPriority) for unknown strings.
     pub fn from_str(s: &str) -> Result<Self, CliError> {
-        todo!("match s.to_lowercase().as_str() → High/Medium/Low or Err")
+        match s.to_lowercase().as_str() {
+            "high" => Ok(Priority::High),
+            "medium" => Ok(Priority::Medium),
+            "low" => Ok(Priority::Low),
+            _ => Err(CliError::InvalidPriority(s.into())),
+        }
     }
 
     /// Return the canonical lowercase name of this variant.
     pub fn as_str(&self) -> &'static str {
-        todo!("match self → \"high\" / \"medium\" / \"low\"")
+        match self {
+            Priority::High => "high",
+            Priority::Medium => "medium",
+            Priority::Low => "low",
+
+        }
     }
 }
 
 // ── Task ──────────────────────────────────────────────────────
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Task {
     pub id: u32,
     pub name: String,
@@ -44,17 +56,22 @@ pub struct Task {
 impl Task {
     /// Create a new incomplete task.
     pub fn new(id: u32, name: impl Into<String>, priority: Priority) -> Self {
-        todo!("construct Task with done: false")
+          Task{
+              id,
+              name:name.into(),
+              priority,
+              done:false,
+          }
     }
 
     /// Mark this task as complete.
     pub fn complete(&mut self) {
-        todo!("set self.done = true")
+        self.done = true;
     }
 
     /// Return true if this task has been completed.
     pub fn is_done(&self) -> bool {
-        todo!("return self.done")
+        self.done
     }
 }
 
@@ -69,28 +86,24 @@ mod tests {
     // ── Priority tests ────────────────────────────────────────
 
     #[test]
-    #[ignore = "implement Priority::from_str"]
     fn test_priority_from_str_high() {
         assert_eq!(Priority::from_str("high").unwrap(), Priority::High);
         assert_eq!(Priority::from_str("HIGH").unwrap(), Priority::High);
     }
 
     #[test]
-    #[ignore = "implement Priority::from_str"]
     fn test_priority_from_str_all_variants() {
         assert_eq!(Priority::from_str("medium").unwrap(), Priority::Medium);
         assert_eq!(Priority::from_str("low").unwrap(), Priority::Low);
     }
 
     #[test]
-    #[ignore = "implement Priority::from_str"]
     fn test_priority_from_str_invalid() {
         assert!(Priority::from_str("urgent").is_err());
         assert!(Priority::from_str("").is_err());
     }
 
     #[test]
-    #[ignore = "implement Priority::as_str"]
     fn test_priority_as_str() {
         assert_eq!(Priority::High.as_str(), "high");
         assert_eq!(Priority::Medium.as_str(), "medium");
@@ -107,7 +120,6 @@ mod tests {
     // ── Task tests ────────────────────────────────────────────
 
     #[test]
-    #[ignore = "implement Task::new"]
     fn test_task_new_starts_incomplete() {
         let t = Task::new(1, "buy milk", Priority::Medium);
         assert_eq!(t.id, 1);
@@ -117,7 +129,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore = "implement Task::complete and Task::is_done"]
     fn test_task_complete() {
         let mut t = Task::new(2, "write tests", Priority::High);
         assert!(!t.is_done());
@@ -126,7 +137,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore = "implement Task::new"]
     fn test_task_clone_is_independent() {
         let t1 = Task::new(3, "original", Priority::Low);
         let mut t2 = t1.clone();

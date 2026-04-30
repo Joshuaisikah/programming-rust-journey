@@ -22,21 +22,46 @@
 //     Use with Mutex<T> or RwLock<T> for interior mutability.
 
 use crate::display::section;
+use std::rc::Rc;
+use std::sync::Arc;
 
 /// Demonstrates Box, Rc, and Arc.
 pub fn demo_heap() {
     section("BOX / Rc / Arc");
 
+
     // TODO: demo 1 — Box<T> for heap allocation
     //   let boxed: Box<i32> = Box::new(42);
     //   println!("boxed value: {}", *boxed);  // auto-deref also works: boxed
     //   // Box is dropped (heap freed) at end of scope
+    let bosed: Box<i32> = Box::new(42);
+    println!("boxed value: {}", *bosed);
+    #[derive(Debug)]
+    enum List {
+        Cons(i32, Box<List>),
+        Nil,
+    }
+    let list = List::Cons(1, Box::new(List::Cons(2, Box::new(List::Nil))));
+    if let List::Cons(head, tail) = &list {
+        println!("head={head}, tail={tail:?}");
+    }
+    println!("{:?}", list);
 
     // TODO: demo 2 — Box for recursive types
     //   #[derive(Debug)]
     //   enum List { Cons(i32, Box<List>), Nil }
     //   let list = List::Cons(1, Box::new(List::Cons(2, Box::new(List::Nil))));
     //   println!("{:?}", list);
+    let a = Rc::new(String::from("shared"));
+    let b = Rc::clone(&a);
+    println!("count: {}", Rc::strong_count(&a));
+    println!("{} {}", a, b);
+    use std::thread;
+    let shared = Arc::new(vec![1, 2, 3]);
+    let clone = Arc::clone(&shared);
+    let handle = thread::spawn(move || println!("thread sees: {:?}", clone));
+    handle.join().unwrap();
+    println!("main sees:   {:?}", shared);
 
     // TODO: demo 3 — Rc<T> for shared ownership
     //   let a = Rc::new(String::from("shared"));
@@ -110,10 +135,17 @@ mod tests {
         assert_eq!(Arc::strong_count(&a), 1);
     }
 
-    // TODO: add test for recursive Box type (List/Tree)
-
     #[test]
-    fn placeholder() {
-        assert!(true);
+    fn test_box_recursive_list() {
+        #[derive(Debug)]
+        enum List {
+            Cons(i32, Box<List>),
+            Nil,
+        }
+        let list = List::Cons(1, Box::new(List::Cons(2, Box::new(List::Nil))));
+        let List::Cons(head, tail) = &list else { panic!("expected Cons") };
+        assert_eq!(*head, 1);
+        let List::Cons(next, _) = tail.as_ref() else { panic!("expected second Cons") };
+        assert_eq!(*next, 2);
     }
 }

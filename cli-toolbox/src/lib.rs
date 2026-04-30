@@ -15,6 +15,7 @@ pub mod models;
 pub mod commands;
 pub mod text;
 pub mod display;
+pub mod storage;
 
 pub use errors::CliError;
 pub use models::{Priority, Task};

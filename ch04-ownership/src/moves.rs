@@ -20,32 +20,32 @@ use crate::display::section;
 pub fn demo_moves() {
     section("MOVE SEMANTICS");
 
-    // TODO: demo 1 — basic String move
-    //   let s1 = String::from("hello");
-    //   let s2 = s1;  // s1 is MOVED into s2 — s1 is no longer valid
-    //   println!("{}", s2);
-    //   // println!("{}", s1);  // ← compile error: value moved
+    let s1 = String::from("hello");
+    let s2 = s1;
+    println!("{}", s2);
 
-    // TODO: demo 2 — move into a function
-    //   fn takes_ownership(s: String) { println!("got: {}", s); }
-    //   let s = String::from("world");
-    //   takes_ownership(s);
-    //   // s is no longer valid here
+    fn takes_ownership(s: String) {
+        println!("got: {}", s);
+    }
+    let s = String::from("world");
+    takes_ownership(s);
 
-    // TODO: demo 3 — return ownership back
-    //   fn gives_back(s: String) -> String { s }
-    //   let s1 = String::from("returned");
-    //   let s2 = gives_back(s1);
-    //   println!("{}", s2);
+    fn gives_back(s: String) -> String {
+        s
+    }
+    let s1 = String::from("returned");
+    let s2 = gives_back(s1);
+    println!("{}", s2);
 
-    // TODO: demo 4 — struct move
-    //   #[derive(Debug)]
-    //   struct Point { x: i32, y: i32 }
-    //   let p1 = Point { x: 1, y: 2 };
-    //   let p2 = p1;  // p1 moved
-    //   println!("{:?}", p2);
+    #[derive(Debug)]
+    struct Point {
+        x: i32,
+        y: i32,
+    }
 
-    println!("(implement the move demos above)");
+    let p1 = Point { x: 1, y: 2 };
+    let p2 = p1;
+    println!("({}, {})", p2.x, p2.y);
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -58,7 +58,9 @@ mod tests {
     /// We verify this by moving into a function and getting back.
     #[test]
     fn test_move_into_function_and_return() {
-        fn round_trip(s: String) -> String { s }
+        fn round_trip(s: String) -> String {
+            s
+        }
         let original = String::from("hello");
         let returned = round_trip(original);
         assert_eq!(returned, "hello");
@@ -72,10 +74,22 @@ mod tests {
         assert_eq!(s2, "move me");
     }
 
-    // TODO: add tests for struct moves, Vec moves, etc.
+    #[test]
+    fn test_struct_move() {
+        #[derive(Debug, PartialEq)]
+        struct Point {
+            x: i32,
+            y: i32,
+        }
+        let p1 = Point { x: 1, y: 2 };
+        let p2 = p1; // p1 moved
+        assert_eq!(p2, Point { x: 1, y: 2 });
+    }
 
     #[test]
-    fn placeholder() {
-        assert!(true);
+    fn test_vec_move() {
+        let v1 = vec![1, 2, 3];
+        let v2 = v1; // v1 moved
+        assert_eq!(v2, vec![1, 2, 3]);
     }
 }

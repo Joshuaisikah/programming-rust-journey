@@ -22,21 +22,33 @@ pub fn demo_copies() {
     //   let x: i32 = 42;
     //   let y = x;          // x is COPIED, not moved
     //   println!("{} {}", x, y);  // both valid
+    let x: i32 = 42;
+    let y = x;
+    println!("{} {}", x, y);
 
     // TODO: demo 2 — bool, char, f64 are also Copy
     //   let flag = true;
     //   let also_flag = flag;
     //   println!("{} {}", flag, also_flag);
+    let flag = true;
+    let also_flag = flag;
+    println!("{} {}", flag, also_flag);
 
     // TODO: demo 3 — tuple of Copy types is Copy
     //   let pair = (1_i32, 2.0_f64);
     //   let also_pair = pair;
     //   println!("{:?} {:?}", pair, also_pair);
+    let pair = (1_i32, 2.0_f64);
+    let also_pair = pair;
+    println!("{:?} {:?}", pair, also_pair);
 
     // TODO: demo 4 — String is NOT Copy; use .clone()
     //   let s1 = String::from("original");
     //   let s2 = s1.clone();   // explicit heap copy
     //   println!("{} {}", s1, s2);
+    let s1 = String::from("original");
+    let s2 = s1.clone();
+    println!("{} {}", s1, s2);
 
     // TODO: demo 5 — derive Copy + Clone on a struct
     //   #[derive(Copy, Clone, Debug)]
@@ -44,6 +56,11 @@ pub fn demo_copies() {
     //   let a = Meters(1.5);
     //   let b = a;   // copied
     //   println!("{:?} {:?}", a, b);
+    #[derive(Copy, Clone, Debug)]
+    struct Meters(f64);
+    let a = Meters(1.5);
+    let b = a;
+    println!("{} {}", a.0, b.0);
 
     println!("(implement the copy/clone demos above)");
 }
@@ -88,10 +105,25 @@ mod tests {
         assert_eq!(a, b);
     }
 
-    // TODO: add tests for tuple copy, array copy, Vec clone, etc.
+    #[test]
+    fn test_tuple_is_copy() {
+        let pair = (1_i32, 2.0_f64);
+        let also = pair;
+        assert_eq!(pair, also); // pair still valid — copied
+    }
 
     #[test]
-    fn placeholder() {
-        assert!(true);
+    fn test_array_is_copy() {
+        let arr = [1_i32, 2, 3];
+        let also = arr;
+        assert_eq!(arr, also); // arr still valid — copied
+    }
+
+    #[test]
+    fn test_vec_clone_is_independent() {
+        let v1 = vec![1, 2, 3];
+        let v2 = v1.clone();
+        assert_eq!(v1, v2);
+        assert_ne!(v1.as_ptr(), v2.as_ptr()); // different heap allocations
     }
 }

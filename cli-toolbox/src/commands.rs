@@ -37,7 +37,47 @@ pub enum Command {
 ///   ["delete",   "<id>"]
 ///   ["search",   "<query>"]
 pub fn parse_command(args: &[String]) -> Result<Command, CliError> {
-    todo!("match args[0] and parse the remaining args into the right variant")
+    if args.is_empty() {
+        return Err(CliError::InvalidCommand("no command provided".into()));
+    }
+    match args[0].as_str() {
+        "add" => {
+            if args.len() < 3 {
+                return Err(CliError::InvalidCommand("add requires name and priority".into()));
+            }
+            let name = args[1].clone();
+            let priority = Priority::from_str(&args[2])?;
+            Ok(Command::Add { name, priority })
+        }
+        "list" => {
+            let show_done = args.len() > 1 && args[1] == "--all";
+            Ok(Command::List { show_done })
+        }
+        "done" => {
+            if args.len() < 2 {
+                return Err(CliError::InvalidCommand("done requires an id".into()));
+            }
+            let id = args[1].parse::<u32>()
+                .map_err(|_| CliError::InvalidId(args[1].clone()))?;
+            Ok(Command::Complete(id))
+        }
+        "delete" => {
+            if args.len() < 2 {
+                return Err(CliError::InvalidCommand("delete requires an id".into()));
+            }
+            let id = args[1].parse::<u32>()
+                .map_err(|_| CliError::InvalidId(args[1].clone()))?;
+            Ok(Command::Delete(id))
+        }
+        "search" => {
+            if args.len() < 2 {
+                return Err(CliError::InvalidCommand("search requires a query".into()));
+            }
+            let query = args[1].clone();
+            Ok(Command::Search(query))
+        }
+        _ => Err(CliError::InvalidCommand(format!("unknown subcommand '{}'", args[0]))),
+    }
 }
 
 // ── Execution ─────────────────────────────────────────────────
@@ -45,12 +85,69 @@ pub fn parse_command(args: &[String]) -> Result<Command, CliError> {
 /// Execute a Command against a mutable task list.
 /// Returns a human-readable success message.
 pub fn execute(cmd: Command, tasks: &mut Vec<Task>) -> Result<String, CliError> {
-    todo!("match cmd and apply it to tasks; return Ok(message) or Err")
+    match cmd {
+        Command::Add { name, priority } => {
+            let id = next_id(tasks);
+            let task = Task::new(id, name.clone(), priority);
+            tasks.push(task);
+            Ok(format!("Added task {} with id {}", name, id))
+        }
+        Command::List { show_done } => {
+            let filtered: Vec<&Task> = tasks
+                .iter()
+                .filter(|t| show_done || !t.is_done())
+                .collect();
+            if filtered.is_empty() {
+                Ok("No tasks found".into())
+            } else {
+                Ok(format_task_list(&filtered))
+            }
+        }
+        Command::Complete(id) => {
+            let task = tasks
+                .iter_mut()
+                .find(|t| t.id == id)
+                .ok_or_else(|| CliError::NotFound(format!("task with id {}", id)))?;
+            task.complete();
+            Ok(format!("Marked task {} as complete", id))
+        }
+        Command::Delete(id) => {
+            let initial_len = tasks.len();
+            tasks.retain(|t| t.id != id);
+            if tasks.len() == initial_len {
+                Err(CliError::NotFound(format!("task with id {}", id)))
+            } else {
+                Ok(format!("Deleted task {}", id))
+            }
+        }
+        Command::Search(query) => {
+            let results: Vec<&Task> = tasks
+                .iter()
+                .filter(|t| t.name.to_lowercase().contains(&query.to_lowercase()))
+                .collect();
+            if results.is_empty() {
+                Ok(format!("No tasks found matching '{}'", query))
+            } else {
+                Ok(format_task_list(&results))
+            }
+        }
+    }
+}
+
+fn format_task_list(tasks: &[&Task]) -> String {
+    tasks
+        .iter()
+        .map(|t| {
+            let status = if t.done { "Tick" } else { "pending " };
+            format!("[{}] {}: {} ({})", status, t.id, t.name, t.priority.as_str())
+        })
+        .collect::<Vec<_>>()
+        .join("\n")
 }
 
 /// Generate the next available task id (1-based, always increasing).
 fn next_id(tasks: &[Task]) -> u32 {
-    todo!("return tasks.iter().map(|t| t.id).max().unwrap_or(0) + 1")
+    tasks.iter().map(|t| t.id).max().unwrap_or(0) + 1
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -68,7 +165,6 @@ mod tests {
     // ── parse_command ─────────────────────────────────────────
 
     #[test]
-    #[ignore = "implement parse_command"]
     fn test_parse_add() {
         let cmd = parse_command(&args(&["add", "buy milk", "high"])).unwrap();
         assert_eq!(
@@ -78,54 +174,46 @@ mod tests {
     }
 
     #[test]
-    #[ignore = "implement parse_command"]
     fn test_parse_list_default() {
         let cmd = parse_command(&args(&["list"])).unwrap();
         assert_eq!(cmd, Command::List { show_done: false });
     }
 
     #[test]
-    #[ignore = "implement parse_command"]
     fn test_parse_list_all() {
         let cmd = parse_command(&args(&["list", "--all"])).unwrap();
         assert_eq!(cmd, Command::List { show_done: true });
     }
 
     #[test]
-    #[ignore = "implement parse_command"]
     fn test_parse_done() {
         let cmd = parse_command(&args(&["done", "3"])).unwrap();
         assert_eq!(cmd, Command::Complete(3));
     }
 
     #[test]
-    #[ignore = "implement parse_command"]
     fn test_parse_delete() {
         let cmd = parse_command(&args(&["delete", "7"])).unwrap();
         assert_eq!(cmd, Command::Delete(7));
     }
 
     #[test]
-    #[ignore = "implement parse_command"]
     fn test_parse_search() {
         let cmd = parse_command(&args(&["search", "milk"])).unwrap();
         assert_eq!(cmd, Command::Search("milk".into()));
     }
 
     #[test]
-    #[ignore = "implement parse_command"]
     fn test_parse_unknown_command_errors() {
         assert!(parse_command(&args(&["fly"])).is_err());
     }
 
     #[test]
-    #[ignore = "implement parse_command"]
     fn test_parse_add_bad_priority_errors() {
         assert!(parse_command(&args(&["add", "task", "urgent"])).is_err());
     }
 
     #[test]
-    #[ignore = "implement parse_command"]
     fn test_parse_done_non_numeric_id_errors() {
         assert!(parse_command(&args(&["done", "abc"])).is_err());
     }
@@ -133,7 +221,6 @@ mod tests {
     // ── execute ───────────────────────────────────────────────
 
     #[test]
-    #[ignore = "implement execute"]
     fn test_execute_add_appends_task() {
         let mut tasks = vec![];
         execute(
@@ -146,7 +233,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore = "implement execute"]
     fn test_execute_complete_marks_task_done() {
         let mut tasks = vec![Task::new(1, "write tests", Priority::High)];
         execute(Command::Complete(1), &mut tasks).unwrap();
@@ -154,7 +240,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore = "implement execute"]
     fn test_execute_complete_not_found_errors() {
         let mut tasks = vec![];
         let result = execute(Command::Complete(99), &mut tasks);
@@ -162,7 +247,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore = "implement execute"]
     fn test_execute_delete_removes_task() {
         let mut tasks = vec![
             Task::new(1, "first", Priority::Low),
@@ -174,7 +258,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore = "implement execute"]
     fn test_execute_search_filters_by_name() {
         let mut tasks = vec![
             Task::new(1, "buy milk", Priority::Low),

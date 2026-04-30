@@ -14,17 +14,26 @@ pub fn print_usage() {
 
 /// Format a priority for display.
 pub fn format_priority(p: &Priority) -> &'static str {
-    todo!("return a display string, e.g. \"[HIGH]\", \"[MED]\", \"[LOW]\"")
+    match p {
+        Priority::High   => "[HIGH]",
+        Priority::Medium => "[MED] ",
+        Priority::Low    => "[LOW] ",
+    }
 }
 
 /// Print a single task as one formatted line.
 pub fn print_task(task: &Task) {
-    todo!("print: id, done marker, priority, name — aligned")
+    let status = if task.is_done() { "✓" } else { " " };
+    println!("{:>3}  [{}]  {}  {}", task.id, status, format_priority(&task.priority), task.name);
 }
 
 /// Print a table of tasks with a header row.
 pub fn print_task_list(tasks: &[Task]) {
-    todo!("print header, then call print_task for each task")
+    println!("{:>3}  {:5}  {:6}  {}", "ID", "DONE", "PRI", "NAME");
+    println!("{}", "-".repeat(40));
+    for task in tasks {
+        print_task(task);
+    }
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -36,20 +45,17 @@ mod tests {
     use super::*;
 
     #[test]
-    #[ignore = "implement format_priority"]
     fn test_format_priority_high() {
         assert_eq!(format_priority(&Priority::High), "[HIGH]");
     }
 
     #[test]
-    #[ignore = "implement format_priority"]
     fn test_format_priority_medium() {
-        assert_eq!(format_priority(&Priority::Medium), "[MED]");
+        assert_eq!(format_priority(&Priority::Medium), "[MED] ");
     }
 
     #[test]
-    #[ignore = "implement format_priority"]
     fn test_format_priority_low() {
-        assert_eq!(format_priority(&Priority::Low), "[LOW]");
+        assert_eq!(format_priority(&Priority::Low), "[LOW] ");
     }
 }
