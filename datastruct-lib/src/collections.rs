@@ -11,10 +11,34 @@ use std::collections::{BTreeMap, HashMap, HashSet, VecDeque};
 
 // ── HashMap patterns ──────────────────────────────────────────
 
-/// Count how many times each element appears.
-/// frequency(&[1, 2, 2, 3]) → {1: 1, 2: 2, 3: 1}
+// frequency: counts how many times each element appears in a slice
+//
+// <T: Eq + Hash + Clone> means:
+//   - T can be any type (i32, char, String, etc.)
+//   - Eq   → items can be compared for equality (is this the same as that?)
+//   - Hash → items can be hashed (HashMap needs this to find the right slot)
+//   - Clone → items can be copied (we clone each item to use as a map key)
+//
+// (items: &[T])       → we borrow a slice of items, we don't own them
+// -> HashMap<T, usize> → we return a map where:
+//                          key   = the item
+//                          value = how many times it appeared
 pub fn frequency<T: Eq + std::hash::Hash + Clone>(items: &[T]) -> HashMap<T, usize> {
-    todo!("use entry().and_modify().or_insert() pattern")
+    let mut map = HashMap::new();
+
+    for item in items {
+        // look up this item in the map:
+        //   - if it doesn't exist yet → create it with value 0
+        //   - if it already exists   → do nothing
+        // either way, count is a &mut usize pointing at the value in the map
+        let count = map.entry(item.clone()).or_insert(0);
+
+        // dereference count and add 1
+        // * is needed because count is a reference, not the number itself
+        *count += 1;
+    }
+
+    map // return the finished map
 }
 
 /// Group items by the result of `key_fn`.
@@ -24,7 +48,12 @@ where
     K: Eq + std::hash::Hash,
     F: Fn(&T) -> K,
 {
-    todo!("entry(k).or_insert(vec![]).push(item)")
+    let mut map = HashMap::new();
+    for item in items {
+        let key = key_fn(&item);
+        map.entry(key).or_insert(vec![]).push(item);
+    }
+    map
 }
 
 /// Swap keys and values. Panics if values are not unique.
@@ -34,17 +63,24 @@ where
     K: Eq + std::hash::Hash,
     V: Eq + std::hash::Hash,
 {
-    todo!("iterate, insert reversed pairs")
+    let mut result = HashMap::new();
+    for (k, v) in map {
+        result.insert(v, k);
+    }
+    result
 }
-
-/// Merge two maps; when both have the same key, combine values with `f`.
 pub fn merge_with<K, V, F>(mut a: HashMap<K, V>, b: HashMap<K, V>, f: F) -> HashMap<K, V>
 where
     K: Eq + std::hash::Hash,
     V: Clone,
     F: Fn(V, V) -> V,
 {
-    todo!("for each (k, v) in b: if key exists in a call f, else insert")
+    for (k, v) in b {
+        a.entry(k)
+            .and_modify(|existing| *existing = f(existing.clone(), v.clone()))
+            .or_insert(v);
+    }
+    a
 }
 
 // ── BTreeMap patterns ─────────────────────────────────────────
@@ -54,12 +90,27 @@ pub fn top_n<K: Clone, V: Ord + Clone>(
     map: &HashMap<K, V>,
     n: usize,
 ) -> Vec<(K, V)> {
-    todo!("collect into vec, sort by value desc, take n")
+    let mut entries: Vec<(K, V)> = map.iter()
+        .map(|(k, v)| (k.clone()
+                       , v.clone()))
+        .collect();
+    entries.sort_by(|a, b| b.1.cmp(&a.1));
+    entries.into_iter().take(n).collect()
+
 }
 
 /// Build a word-length index: length → sorted list of words with that length.
 pub fn length_index(words: &[&str]) -> BTreeMap<usize, Vec<String>> {
-    todo!("group words by word.len(); sort each group")
+ let mut map: BTreeMap<usize, Vec<String>> = BTreeMap::new();
+    for word in words {
+        map.entry(word.len())
+            .or_insert(vec![])
+            .push(word.to_string());
+    }
+    for v in map.values_mut() {
+        v.sort();
+    }
+    map
 }
 
 // ── Set operations ────────────────────────────────────────────
@@ -69,7 +120,12 @@ pub fn intersect<T: Eq + std::hash::Hash + Clone>(
     a: &HashSet<T>,
     b: &HashSet<T>,
 ) -> HashSet<T> {
-    todo!("a.iter().filter(|x| b.contains(x)).cloned().collect()")
+    a.iter()
+        .filter(|x| b.contains(x))
+    .cloned()
+    .collect()
+
+
 }
 
 /// Return elements in `a` that are not in `b`.
@@ -77,7 +133,8 @@ pub fn difference<T: Eq + std::hash::Hash + Clone>(
     a: &HashSet<T>,
     b: &HashSet<T>,
 ) -> HashSet<T> {
-    todo!("a.iter().filter(|x| !b.contains(x)).cloned().collect()")
+
+    a.iter().filter(|x| !b.contains(x)).cloned().collect()
 }
 
 // ── VecDeque ──────────────────────────────────────────────────
@@ -85,7 +142,10 @@ pub fn difference<T: Eq + std::hash::Hash + Clone>(
 /// Rotate a VecDeque left by `n` positions.
 /// rotate_left([1,2,3,4,5], 2) → [3,4,5,1,2]
 pub fn rotate_left<T>(mut deque: VecDeque<T>, n: usize) -> VecDeque<T> {
-    todo!("use deque.rotate_left(n % deque.len())")
+if !deque.is_empty() {
+    deque.rotate_left(n%deque.len());
+}
+deque
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -99,7 +159,6 @@ mod tests {
     // ── frequency ─────────────────────────────────────────────
 
     #[test]
-    #[ignore = "implement frequency"]
     fn test_frequency_basic() {
         let freq = frequency(&[1, 2, 2, 3, 3, 3]);
         assert_eq!(freq[&1], 1);
@@ -108,14 +167,12 @@ mod tests {
     }
 
     #[test]
-    #[ignore = "implement frequency"]
     fn test_frequency_empty() {
         let freq = frequency::<i32>(&[]);
         assert!(freq.is_empty());
     }
 
     #[test]
-    #[ignore = "implement frequency"]
     fn test_frequency_single_element() {
         let freq = frequency(&['a', 'a', 'a']);
         assert_eq!(freq[&'a'], 3);
@@ -124,7 +181,6 @@ mod tests {
     // ── group_by ──────────────────────────────────────────────
 
     #[test]
-    #[ignore = "implement group_by"]
     fn test_group_by_parity() {
         let groups = group_by(vec![1, 2, 3, 4, 5], |x| x % 2 == 0);
         let mut evens = groups[&true].clone();
@@ -138,7 +194,6 @@ mod tests {
     // ── invert_map ────────────────────────────────────────────
 
     #[test]
-    #[ignore = "implement invert_map"]
     fn test_invert_map_basic() {
         let mut m = HashMap::new();
         m.insert("a", 1_i32);
@@ -151,7 +206,6 @@ mod tests {
     // ── merge_with ────────────────────────────────────────────
 
     #[test]
-    #[ignore = "implement merge_with"]
     fn test_merge_with_sums_duplicates() {
         let mut a = HashMap::new();
         a.insert("x", 1_i32);
@@ -168,7 +222,6 @@ mod tests {
     // ── length_index ──────────────────────────────────────────
 
     #[test]
-    #[ignore = "implement length_index"]
     fn test_length_index_groups_by_length() {
         let idx = length_index(&["hi", "rust", "cat", "go", "code"]);
         assert_eq!(idx[&2], vec!["go", "hi"]);
@@ -179,7 +232,6 @@ mod tests {
     // ── set operations ────────────────────────────────────────
 
     #[test]
-    #[ignore = "implement intersect"]
     fn test_intersect() {
         let a: HashSet<i32> = [1, 2, 3, 4].into_iter().collect();
         let b: HashSet<i32> = [3, 4, 5, 6].into_iter().collect();
@@ -190,7 +242,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore = "implement difference"]
     fn test_difference() {
         let a: HashSet<i32> = [1, 2, 3, 4].into_iter().collect();
         let b: HashSet<i32> = [3, 4, 5].into_iter().collect();
@@ -203,7 +254,6 @@ mod tests {
     // ── rotate_left ───────────────────────────────────────────
 
     #[test]
-    #[ignore = "implement rotate_left"]
     fn test_rotate_left_basic() {
         let d: VecDeque<i32> = vec![1, 2, 3, 4, 5].into();
         let result: Vec<i32> = rotate_left(d, 2).into_iter().collect();
@@ -211,7 +261,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore = "implement rotate_left"]
     fn test_rotate_left_by_zero() {
         let d: VecDeque<i32> = vec![1, 2, 3].into();
         let result: Vec<i32> = rotate_left(d, 0).into_iter().collect();

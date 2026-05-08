@@ -32,6 +32,10 @@
       <sourceFolder url="file://$MODULE_DIR$/ch22-unsafe/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ch23-ffi/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/password-vault/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/cli-toolbox/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/datastruct-lib/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/forge/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/netwatch/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
