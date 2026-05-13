@@ -148,6 +148,38 @@ if !deque.is_empty() {
 deque
 }
 
+// ── Demo ──────────────────────────────────────────────────────
+
+pub fn demo() {
+    println!("=== Collections demo ===");
+    let freq = frequency(&[1, 2, 2, 3, 3, 3]);
+    let mut freq_sorted: Vec<_> = freq.iter().collect();
+    freq_sorted.sort();
+    println!("frequency [1,2,2,3,3,3]            : {:?}", freq_sorted);
+
+    let groups = group_by(vec![1, 2, 3, 4, 5], |x| x % 2 == 0);
+    let mut evens = groups[&true].clone();  evens.sort();
+    let mut odds  = groups[&false].clone(); odds.sort();
+    println!("group_by parity — evens: {:?}  odds: {:?}", evens, odds);
+
+    let a: HashSet<i32> = [1, 2, 3, 4].into_iter().collect();
+    let b: HashSet<i32> = [3, 4, 5, 6].into_iter().collect();
+    let mut inter: Vec<i32> = intersect(&a, &b).into_iter().collect();
+    inter.sort();
+    println!("intersect {{1,2,3,4}} & {{3,4,5,6}}  : {:?}", inter);
+
+    let mut diff: Vec<i32> = difference(&a, &b).into_iter().collect();
+    diff.sort();
+    println!("difference {{1,2,3,4}} - {{3,4,5,6}} : {:?}", diff);
+
+    let deq: VecDeque<i32> = vec![1, 2, 3, 4, 5].into();
+    let rotated: Vec<i32> = rotate_left(deq, 2).into_iter().collect();
+    println!("rotate_left [1,2,3,4,5] by 2       : {:?}", rotated);
+
+    let idx = length_index(&["hi", "rust", "cat", "go", "code"]);
+    println!("length_index                       : {:?}", idx);
+}
+
 // ─────────────────────────────────────────────────────────────
 // Tests
 // ─────────────────────────────────────────────────────────────

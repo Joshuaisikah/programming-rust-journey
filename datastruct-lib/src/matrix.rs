@@ -146,6 +146,21 @@ impl fmt::Display for Matrix {
     }
 }
 
+// ── Demo ──────────────────────────────────────────────────────
+
+pub fn demo() {
+    println!("=== Matrix demo ===");
+    let a = Matrix::from_vec(2, 2, vec![1.0, 2.0, 3.0, 4.0]);
+    let b = Matrix::from_vec(2, 2, vec![5.0, 6.0, 7.0, 8.0]);
+    println!("A:\n{}", a);
+    println!("B:\n{}", b);
+    println!("A + B:\n{}", a.clone() + b.clone());
+    println!("A * B:\n{}", a.clone() * b.clone());
+    println!("A transposed:\n{}", a.transpose());
+    println!("3×3 identity:\n{}", Matrix::identity(3));
+    println!("A[0][1] = {}", a[0][1]);
+}
+
 // ─────────────────────────────────────────────────────────────
 // Tests
 // ─────────────────────────────────────────────────────────────

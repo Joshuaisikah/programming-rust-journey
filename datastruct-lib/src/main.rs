@@ -11,6 +11,8 @@
 
 use std::env;
 
+use datastruct_lib::{collections, functional, iterators, matrix, stack};
+
 fn print_usage() {
     println!("Usage:");
     println!("  cargo run -- stack");
@@ -29,11 +31,11 @@ fn main() {
     }
 
     match args[1].as_str() {
-        "stack"       => println!("(implement stack demo)"),
-        "matrix"      => println!("(implement matrix demo)"),
-        "functional"  => println!("(implement functional demo)"),
-        "iterators"   => println!("(implement iterators demo)"),
-        "collections" => println!("(implement collections demo)"),
+        "stack"       => stack::demo(),
+        "matrix"      => matrix::demo(),
+        "functional"  => functional::demo(),
+        "iterators"   => iterators::demo(),
+        "collections" => collections::demo(),
         _ => {
             eprintln!("Unknown: {}", args[1]);
             print_usage();

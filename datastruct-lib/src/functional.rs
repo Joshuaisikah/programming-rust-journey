@@ -14,18 +14,36 @@
 /// Apply `f` to each element of `v`, returning a new Vec.
 /// Equivalent to v.into_iter().map(f).collect() — implement manually.
 pub fn map_vec<T, U, F: Fn(T) -> U>(v: Vec<T>, f: F) -> Vec<U> {
-    todo!("iterate v, call f on each element, collect into Vec<U>")
+    let mut result = Vec::with_capacity(v.len());
+    for item in v {
+        result.push(f(item));
+    }
+    result
 }
 
 /// Keep only elements of `v` for which `predicate` returns true.
 pub fn filter_vec<T, F: Fn(&T) -> bool>(v: Vec<T>, predicate: F) -> Vec<T> {
-    todo!("iterate v, retain elements where predicate(&elem) is true")
+  let mut result = Vec::new();
+    for item in v  {
+         if predicate(&item) {
+             result.push(item);
+         }
+    }
+    result
+
 }
 
 /// Reduce `v` to a single value by applying `f` left-to-right.
 /// Returns None for an empty slice.
 pub fn fold_vec<T: Clone, F: Fn(T, T) -> T>(v: &[T], f: F) -> Option<T> {
-    todo!("start with v[0].clone(), fold the rest with f")
+    if v.is_empty() {
+        return None;
+    }
+    let mut result = v[0].clone();
+    for item in &v[1..] {
+        result = f(result, item.clone());
+    }
+    Some(result)
 }
 
 // ── Function composition ──────────────────────────────────────
@@ -37,12 +55,18 @@ where
     F: Fn(A) -> B,
     G: Fn(B) -> C,
 {
-    move |x| todo!("call f then g — use move to capture both")
+    move |x|g(f(x))
+
 }
 
 /// Apply `f` exactly `n` times: apply_n(f, 3)(x) == f(f(f(x)))
 pub fn apply_n<T: Clone, F: Fn(T) -> T>(f: F, n: u32) -> impl Fn(T) -> T {
-    move |x| todo!("loop n times applying f, or use recursion")
+    move |mut x|{
+        for _ in 0..n {
+            x=f(x.clone());
+        }
+        x
+    }
 }
 
 // ── Closure capture demos ─────────────────────────────────────
@@ -50,12 +74,36 @@ pub fn apply_n<T: Clone, F: Fn(T) -> T>(f: F, n: u32) -> impl Fn(T) -> T {
 /// Return a closure that adds `delta` to its argument (captures by value).
 pub fn make_adder(delta: i32) -> impl Fn(i32) -> i32 {
     let _ = delta;
-    move |_x| todo!("x + delta")
+    move |_x| _x +delta
 }
 
 /// Return a counter closure that increments on each call (FnMut capture).
 pub fn make_counter() -> impl FnMut() -> i32 {
-    move || todo!("capture a mutable count, increment and return it")
+    let mut count = 0;
+    move || {
+        count += 1;
+        count
+    }
+}
+
+// ── Demo ──────────────────────────────────────────────────────
+
+pub fn demo() {
+    println!("=== Closures / Functional demo ===");
+    let doubled = map_vec(vec![1, 2, 3, 4], |x| x * 2);
+    println!("map_vec [1,2,3,4] ×2        : {:?}", doubled);
+    let evens = filter_vec(vec![1, 2, 3, 4, 5, 6], |x| x % 2 == 0);
+    println!("filter_vec evens            : {:?}", evens);
+    let sum = fold_vec(&[1, 2, 3, 4, 5], |a, b| a + b);
+    println!("fold_vec sum                : {:?}", sum);
+    let add_then_double = compose(|x: i32| x + 1, |x| x * 2);
+    println!("compose(+1, ×2)(3)          : {}", add_then_double(3));
+    let add_three = apply_n(|x: i32| x + 1, 3);
+    println!("apply_n(+1, 3)(10)          : {}", add_three(10));
+    let add5 = make_adder(5);
+    println!("make_adder(5)(10)           : {}", add5(10));
+    let mut counter = make_counter();
+    println!("make_counter ×3             : {}, {}, {}", counter(), counter(), counter());
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -67,47 +115,40 @@ mod tests {
     use super::*;
 
     #[test]
-    #[ignore = "implement map_vec"]
     fn test_map_vec_doubles() {
         let result = map_vec(vec![1, 2, 3], |x| x * 2);
         assert_eq!(result, vec![2, 4, 6]);
     }
 
     #[test]
-    #[ignore = "implement map_vec"]
     fn test_map_vec_to_strings() {
         let result = map_vec(vec![1, 2, 3], |x| x.to_string());
         assert_eq!(result, vec!["1", "2", "3"]);
     }
 
     #[test]
-    #[ignore = "implement filter_vec"]
     fn test_filter_vec_evens() {
         let result = filter_vec(vec![1, 2, 3, 4, 5, 6], |x| x % 2 == 0);
         assert_eq!(result, vec![2, 4, 6]);
     }
 
     #[test]
-    #[ignore = "implement filter_vec"]
     fn test_filter_vec_empty_result() {
         let result = filter_vec(vec![1, 3, 5], |x| x % 2 == 0);
         assert!(result.is_empty());
     }
 
     #[test]
-    #[ignore = "implement fold_vec"]
     fn test_fold_vec_sum() {
         assert_eq!(fold_vec(&[1, 2, 3, 4], |a, b| a + b), Some(10));
     }
 
     #[test]
-    #[ignore = "implement fold_vec"]
     fn test_fold_vec_empty_returns_none() {
         assert_eq!(fold_vec::<i32, _>(&[], |a, b| a + b), None);
     }
 
     #[test]
-    #[ignore = "implement compose"]
     fn test_compose_add_then_double() {
         let add_one = |x: i32| x + 1;
         let double  = |x: i32| x * 2;
@@ -116,7 +157,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore = "implement apply_n"]
     fn test_apply_n_three_times() {
         let add_one = |x: i32| x + 1;
         let add_three = apply_n(add_one, 3);
@@ -124,7 +164,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore = "implement apply_n"]
     fn test_apply_n_zero_is_identity() {
         let double = |x: i32| x * 2;
         let noop = apply_n(double, 0);
@@ -132,7 +171,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore = "implement make_adder"]
     fn test_make_adder() {
         let add5 = make_adder(5);
         assert_eq!(add5(10), 15);
@@ -140,7 +178,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore = "implement make_counter"]
     fn test_make_counter_increments() {
         let mut count = make_counter();
         assert_eq!(count(), 1);
